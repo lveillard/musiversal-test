@@ -7,7 +7,7 @@ import Main from "layouts/main/Main.js";
 import Login from "layouts/login/Login.js";
 import { useGlobal } from "store";
 
-import { fb } from "fb";
+import { fb, auth } from "fb";
 
 const Routes = () => {
   // load the global state and actions
@@ -19,6 +19,8 @@ const Routes = () => {
   // this useEffect will check if we are logged or not
   useEffect(() => {
     fb.auth().onAuthStateChanged((user) => {
+      //update user information
+      globalActions.login.setUser(user);
       if (user) {
         console.log("Logged in");
         setIsLoading(false);
@@ -40,7 +42,7 @@ const Routes = () => {
       <Switch>
         {/*Login window. Redirects to app if already logged*/}
         <Route path="/auth">
-          {!globalState.isLogged ? <Login /> : <Redirect to="/app" />}
+          {!auth.currentUser ? <Login /> : <Redirect to="/app" />}
         </Route>
         {/*Main window. Is protected and only authed users can access*/}
         <ProtectedRoute path="/app" component={<Main />} />
