@@ -1,12 +1,13 @@
 import React from "react";
 import { Route, Redirect } from "react-router-dom";
+import { auth } from "fb";
 
 const ProtectedRoute = ({ component: Component, ...rest }) => {
   return (
     <Route
       {...rest}
       render={(props) => {
-        if (true) {
+        if (auth.currentUser) {
           return { ...Component, props: props, rest: rest };
         } else {
           return (
